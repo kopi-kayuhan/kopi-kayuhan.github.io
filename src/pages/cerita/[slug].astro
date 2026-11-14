@@ -19,6 +19,8 @@ const formatDate = new Intl.DateTimeFormat("id-ID", {
   month: "long",
   year: "numeric",
 }).format(story.data.date);
+
+const gallery = story.data.gallery ?? [];
 ---
 
 <!doctype html>
@@ -66,6 +68,23 @@ const formatDate = new Intl.DateTimeFormat("id-ID", {
       <div class="article-body">
         <Content />
       </div>
+
+      {gallery.length > 0 && (
+        <section class="story-gallery">
+          <h2>Potret Perjalanan</h2>
+          <p>Beberapa momen yang tersimpan dalam cerita ini.</p>
+
+          <div class="gallery-grid">
+            {gallery.map((photo, index) => (
+              <img
+                src={photo}
+                alt={`${story.data.title} - foto ${index + 1}`}
+                loading="lazy"
+              />
+            ))}
+          </div>
+        </section>
+      )}
     </article>
   </main>
 
@@ -186,6 +205,35 @@ const formatDate = new Intl.DateTimeFormat("id-ID", {
     height: auto;
   }
 
+  .story-gallery {
+    margin-top: 65px;
+  }
+
+  .story-gallery h2 {
+    margin-bottom: 8px;
+    font-family: Georgia, serif;
+    font-size: 28px;
+  }
+
+  .story-gallery > p {
+    margin-bottom: 24px;
+    color: #85857c;
+    font-size: 14px;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .gallery-grid img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+
   footer {
     padding: 30px 24px;
     border-top: 1px solid #e9e6dc;
@@ -217,6 +265,14 @@ const formatDate = new Intl.DateTimeFormat("id-ID", {
 
     main {
       width: calc(100% - 36px);
+    }
+
+    .gallery-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .gallery-grid img {
+      height: 240px;
     }
   }
 </style>
