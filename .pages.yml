@@ -14,6 +14,9 @@ media:
     rename: safe
 
 content:
+  # ========================================
+  # CERITA
+  # ========================================
   - name: stories
     label: Cerita
     type: collection
@@ -83,20 +86,23 @@ content:
           media: images
           path: .
 
-      - name: about
-        label: Tentang Kopi & Kayuhan
-        type: file
-        path: src/data/about.json
-        format: json
-        fields:
-          - name: title
-            label: Judul halaman
-            type: string
+  # ========================================
+  # TENTANG KOPI & KAYUHAN
+  # ========================================
+  - name: about
+    label: Tentang Kopi & Kayuhan
+    type: file
+    path: src/data/about.json
+    format: json
+    fields:
+      - name: title
+        label: Judul halaman
+        type: string
 
-          - name: description
-            label: Deskripsi singkat
-            type: text
+      - name: description
+        label: Deskripsi singkat
+        type: text
 
-          - name: body
-            label: Cerita tentang kami
-            type: text
+      - name: body
+        label: Cerita tentang kami
+        type: text
