@@ -3,7 +3,7 @@ title: Menikmati Gowes di Pagi Hari
 description: Perjalanan sederhana menikmati udara pagi
 date: 2026-11-15
 category: Cerita Gowes
-cover: /images/gowes-pagi.png
+cover: /images/gowes-pagi.jpg
 gallery:
   - /images/images-1.jpeg
   - /images/gowes-pagi-1.png
