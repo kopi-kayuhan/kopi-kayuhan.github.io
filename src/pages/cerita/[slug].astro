@@ -23,12 +23,14 @@ const formatDate = new Intl.DateTimeFormat("id-ID", {
 const canonicalURL = new URL(
   `/cerita/${story.id}/`,
   Astro.site
-).toString();
+).href;
 
+// URL absolut untuk foto sampul.
+// Foto ini otomatis digunakan sebagai OG Image.
 const coverURL = new URL(
   story.data.cover,
   Astro.site
-).toString();
+).href;
 
 const gallery = story.data.gallery ?? [];
 ---
@@ -38,23 +40,75 @@ const gallery = story.data.gallery ?? [];
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <meta name="description" content={story.data.description} />
+
+    <meta
+      name="description"
+      content={story.data.description}
+    />
+
+    <meta name="theme-color" content="#f8f7f3" />
 
     <title>{story.data.title} — Kopi & Kayuhan</title>
 
+    <link rel="canonical" href={canonicalURL} />
+
     <!-- Open Graph Metadata -->
     <meta property="og:type" content="article" />
-    <meta property="og:title" content={story.data.title} />
-    <meta property="og:description" content={story.data.description} />
-    <meta property="og:url" content={canonicalURL} />
-    <meta property="og:image" content={coverURL} />
-    <meta property="og:image:alt" content={story.data.title} />
+    <meta property="og:site_name" content="Kopi & Kayuhan" />
+    <meta property="og:locale" content="id_ID" />
 
-    <!-- Twitter / Social Media Preview -->
+    <meta
+      property="og:title"
+      content={`${story.data.title} — Kopi & Kayuhan`}
+    />
+
+    <meta
+      property="og:description"
+      content={story.data.description}
+    />
+
+    <meta
+      property="og:url"
+      content={canonicalURL}
+    />
+
+    <meta
+      property="og:image"
+      content={coverURL}
+    />
+
+    <meta
+      property="og:image:secure_url"
+      content={coverURL}
+    />
+
+    <meta
+      property="og:image:alt"
+      content={story.data.title}
+    />
+
+    <meta
+      property="article:published_time"
+      content={story.data.date.toISOString()}
+    />
+
+    <!-- Twitter / Social Media Metadata -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={story.data.title} />
-    <meta name="twitter:description" content={story.data.description} />
-    <meta name="twitter:image" content={coverURL} />
+
+    <meta
+      name="twitter:title"
+      content={`${story.data.title} — Kopi & Kayuhan`}
+    />
+
+    <meta
+      name="twitter:description"
+      content={story.data.description}
+    />
+
+    <meta
+      name="twitter:image"
+      content={coverURL}
+    />
   </head>
 
   <body>
@@ -98,7 +152,7 @@ const gallery = story.data.gallery ?? [];
         <!-- Cover Image -->
         <img
           class="cover"
-          src={story.data.cover}
+          src={coverURL}
           alt={story.data.title}
         />
 
@@ -107,20 +161,20 @@ const gallery = story.data.gallery ?? [];
           <Content />
         </div>
 
-       <!-- Share Button -->
-      <div class="share-section">
-        <button
-          type="button"
-          id="share-button"
-          class="share-button"
-          data-title={story.data.title}
-          data-description={story.data.description}
-          data-url={canonicalURL}
-        >
-          <span>↗</span>
-          Bagikan Cerita
-        </button>
-      </div>
+        <!-- Share Button -->
+        <div class="share-section">
+          <button
+            type="button"
+            id="share-button"
+            class="share-button"
+            data-title={story.data.title}
+            data-description={story.data.description}
+            data-url={canonicalURL}
+          >
+            <span>↗</span>
+            Bagikan Cerita
+          </button>
+        </div>
 
         <!-- Photo Gallery -->
         {gallery.length > 0 && (
