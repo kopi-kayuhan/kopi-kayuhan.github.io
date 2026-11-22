@@ -4,8 +4,6 @@ description: 🚴 Gowes Pagi, Menenangkan Hati
 date: 2026-11-22
 category: Goes Pagi
 cover: /images/1000340237.jpg
-gallery:
-  - /images/1000340234.jpg
 location: Bogor
 ---
 Pagi ini memilih keluar rumah, membawa sepeda dan meninggalkan sejenak rutinitas yang melelahkan.
