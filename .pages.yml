@@ -13,6 +13,16 @@ media:
       - image
     rename: safe
 
+  - name: videos
+    label: Video Kopi & Kayuhan
+    input: public/videos
+    output: /videos
+    extensions:
+      - mp4
+    categories:
+      - video
+    rename: safe
+
 content:
   # ========================================
   # CERITA
@@ -73,6 +83,13 @@ content:
           multiple:
             max: 5
           unique: true
+
+      - name: video
+        label: Video kegiatan (opsional)
+        type: file
+        options:
+          media: videos
+          path: .
 
       - name: location
         label: Lokasi
