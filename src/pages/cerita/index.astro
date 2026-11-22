@@ -1,6 +1,7 @@
 
 ---
 import { getCollection } from "astro:content";
+import GoatCounter from "../../components/GoatCounter.astro";
 
 const stories = await getCollection("stories");
 
@@ -21,12 +22,19 @@ const formatDate = (date: Date) =>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width" />
-  <meta name="description" content="Kumpulan cerita Kopi & Kayuhan." />
+  <meta
+    name="description"
+    content="Kumpulan cerita Kopi & Kayuhan."
+  />
   <title>Semua Cerita — Kopi & Kayuhan</title>
+
+  <GoatCounter />
 </head>
+
 <body>
   <header class="header">
     <a href="/">Kopi & Kayuhan</a>
+
     <nav>
       <a href="/">Beranda</a>
       <a href="/cerita/" aria-current="page">Cerita</a>
@@ -59,20 +67,57 @@ const formatDate = (date: Date) =>
               </a>
 
               <div class="content">
-                <span class="category">{story.data.category}</span>
+                <span class="category">
+                  {story.data.category}
+                </span>
+
                 <h2>
                   <a href={`/cerita/${story.id}/`}>
                     {story.data.title}
                   </a>
                 </h2>
+
                 <p>{story.data.description}</p>
+
                 <div class="meta">
                   <time datetime={story.data.date.toISOString()}>
                     {formatDate(story.data.date)}
                   </time>
+
                   {story.data.location && (
                     <span>{story.data.location}</span>
                   )}
+                </div>
+
+                <!-- Visitor Counter -->
+                <div class="visit-counter">
+                  <svg
+                    class="visit-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+
+                  <span
+                    class="visit-count"
+                    data-story-path={`/cerita/${story.id}/`}
+                  >
+                    Memuat...
+                  </span>
+
+                  <span class="visit-label">
+                    kali dikunjungi
+                  </span>
                 </div>
               </div>
             </article>
@@ -88,6 +133,52 @@ const formatDate = (date: Date) =>
     <a href="/">Kopi & Kayuhan</a>
     <p>Secangkir kopi, sejuta cerita.</p>
   </footer>
+
+  <!-- GoatCounter JSON Visitor Counts -->
+  <script is:inline>
+    (async function loadStoryVisitCounts() {
+      const counters = document.querySelectorAll(".visit-count");
+
+      await Promise.all(
+        Array.from(counters).map(async (counter) => {
+          const path = counter.getAttribute("data-story-path");
+
+          if (!path) return;
+
+          const endpoint =
+            "https://kopi-kayuhan.goatcounter.com/counter/" +
+            encodeURIComponent(path) +
+            ".json";
+
+          try {
+            const response = await fetch(endpoint);
+
+            if (response.status === 404) {
+              counter.textContent = "0";
+              return;
+            }
+
+            if (!response.ok) {
+              throw new Error(
+                `GoatCounter returned ${response.status}`
+              );
+            }
+
+            const data = await response.json();
+
+            counter.textContent = data.count ?? "0";
+          } catch (error) {
+            console.error(
+              `Gagal mengambil kunjungan untuk ${path}:`,
+              error
+            );
+
+            counter.textContent = "-";
+          }
+        })
+      );
+    })();
+  </script>
 </body>
 </html>
 
@@ -107,6 +198,8 @@ const formatDate = (date: Date) =>
     color: inherit;
     text-decoration: none;
   }
+
+  /* Header */
 
   .header {
     min-height: 78px;
@@ -137,6 +230,8 @@ const formatDate = (date: Date) =>
     font-weight: bold;
   }
 
+  /* Main */
+
   main {
     width: min(1120px, calc(100% - 48px));
     margin: auto;
@@ -155,7 +250,8 @@ const formatDate = (date: Date) =>
     letter-spacing: 1.5px;
   }
 
-  h1, h2 {
+  h1,
+  h2 {
     font-family: Georgia, serif;
   }
 
@@ -172,6 +268,8 @@ const formatDate = (date: Date) =>
   .stories {
     padding-bottom: 90px;
   }
+
+  /* Story Cards */
 
   .grid {
     display: grid;
@@ -194,6 +292,11 @@ const formatDate = (date: Date) =>
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .cover:hover img {
+    transform: scale(1.04);
   }
 
   .content {
@@ -205,11 +308,17 @@ const formatDate = (date: Date) =>
     line-height: 1.35;
   }
 
+  h2 a:hover {
+    color: #59634a;
+  }
+
   .content p {
     color: #74756c;
     font-size: 13px;
     line-height: 1.8;
   }
+
+  /* Date and Location */
 
   .meta {
     display: flex;
@@ -220,6 +329,34 @@ const formatDate = (date: Date) =>
     color: #929187;
     font-size: 11px;
   }
+
+  /* Visitor Counter */
+
+  .visit-counter {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 18px;
+    color: #85857c;
+    font-size: 12px;
+  }
+
+  .visit-icon {
+    flex-shrink: 0;
+    color: #59634a;
+  }
+
+  .visit-count {
+    color: #59634a;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .visit-label {
+    color: #85857c;
+  }
+
+  /* Footer */
 
   footer {
     padding: 30px 24px;
@@ -232,7 +369,15 @@ const formatDate = (date: Date) =>
     font-size: 12px;
   }
 
-  @media (max-width: 760px) {
+  /* Responsive */
+
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 600px) {
     .header {
       align-items: flex-start;
       flex-direction: column;

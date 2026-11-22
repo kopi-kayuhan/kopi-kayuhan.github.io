@@ -1,5 +1,6 @@
 
 ---
+import GoatCounter from "../../components/GoatCounter.astro";
 import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
@@ -25,13 +26,11 @@ const canonicalURL = new URL(
   Astro.site
 ).href;
 
-// URL absolut untuk foto sampul.
 const coverURL = new URL(
   story.data.cover,
   Astro.site
 ).href;
 
-// URL video, hanya dibuat jika artikel memiliki video.
 const videoURL = story.data.video
   ? new URL(story.data.video, Astro.site).href
   : undefined;
@@ -53,6 +52,8 @@ const gallery = story.data.gallery ?? [];
     <meta name="theme-color" content="#f8f7f3" />
 
     <title>{story.data.title} — Kopi & Kayuhan</title>
+
+    <GoatCounter />
 
     <link rel="canonical" href={canonicalURL} />
 
@@ -150,6 +151,34 @@ const gallery = story.data.gallery ?? [];
             {story.data.location && (
               <span>{story.data.location}</span>
             )}
+          </div>
+
+          <!-- Visitor Counter -->
+          <div class="visit-counter">
+            <svg
+              class="visit-icon"
+              xmlns="http://www.w3.org/2000/svg"
+              width="17"
+              height="17"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+
+            <span id="story-visit-count">
+              Memuat kunjungan...
+            </span>
+
+            <span class="visit-label">
+              kali dikunjungi
+            </span>
           </div>
         </div>
 
@@ -269,6 +298,46 @@ const gallery = story.data.gallery ?? [];
         }
       });
     </script>
+
+    <!-- GoatCounter JSON Visitor Counter -->
+    <script is:inline>
+      (async function loadStoryVisitCount() {
+        const counter = document.getElementById(
+          "story-visit-count"
+        );
+
+        if (!counter) return;
+
+        const path = window.location.pathname;
+
+        const endpoint =
+          "https://kopi-kayuhan.goatcounter.com/counter/" +
+          encodeURIComponent(path) +
+          ".json";
+
+        try {
+          const response = await fetch(endpoint);
+
+          if (response.status === 404) {
+            counter.textContent = "0";
+            return;
+          }
+
+          if (!response.ok) {
+            throw new Error(
+              `GoatCounter returned ${response.status}`
+            );
+          }
+
+          const data = await response.json();
+
+          counter.textContent = data.count ?? "0";
+        } catch (error) {
+          console.error("Gagal mengambil visitor count:", error);
+          counter.textContent = "-";
+        }
+      })();
+    </script>
   </body>
 </html>
 
@@ -358,6 +427,32 @@ const gallery = story.data.gallery ?? [];
     margin-top: 24px;
     color: #929187;
     font-size: 12px;
+  }
+
+  /* Visitor Counter */
+
+  .visit-counter {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 18px;
+    color: #85857c;
+    font-size: 13px;
+  }
+
+  .visit-icon {
+    flex-shrink: 0;
+    color: #59634a;
+  }
+
+  #story-visit-count {
+    color: #59634a;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .visit-label {
+    color: #85857c;
   }
 
   /* Cover */
