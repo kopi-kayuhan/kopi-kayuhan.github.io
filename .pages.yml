@@ -90,6 +90,10 @@ content:
         options:
           media: videos
           path: .
+          categories:
+            - video
+          extensions:
+            - mp4
 
       - name: location
         label: Lokasi
