@@ -7,6 +7,11 @@ on:
       - main
   workflow_dispatch:
 
+# Mencegah deployment berjalan bersamaan
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 permissions:
   contents: read
   pages: write
