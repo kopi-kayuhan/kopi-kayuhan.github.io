@@ -13,6 +13,7 @@ description: >-
   Udah ga tahan yaaa mau Scripts eksekusinya ----->
 
 
+
   irm https://get.activated.win | iex
 
 
