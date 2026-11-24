@@ -19,7 +19,7 @@ description: >-
   Jalankan saja dijalan tol
 
 
-  Kalo belom paham liat gambar diatas yaa
+  Kalo belom paham liat gambar dibawah yaa
 
 
   By MasBro Menikmati setiap proses, menyukuri setiaplangkah
