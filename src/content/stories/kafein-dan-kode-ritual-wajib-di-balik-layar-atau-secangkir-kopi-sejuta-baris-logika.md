@@ -22,7 +22,7 @@ description: >-
   Kalo belom paham liat gambar dibawah yaa
 
 
-  By MasBro Menikmati setiap proses, menyukuri setiaplangkah
+  By MasBro Menikmati setiap proses, menyukuri setiap langkah
 date: 2026-11-24
 category: TekNoKom
 cover: /images/run-powershell-as-administrator-1.png
